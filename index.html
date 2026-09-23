@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>英文單字聽音拼字遊戲 (51-75)</title>
+    <title>Grade 4 英文聽音拼字大闖關 (1-300)</title>
     <style>
         * { box-sizing: border-box; }
         body { 
@@ -24,6 +24,22 @@
             box-shadow: 0 8px 20px rgba(0,0,0,0.08); 
         }
         h1 { color: #2c3e50; font-size: 22px; margin-top: 0; }
+        
+        .select-box {
+            margin-bottom: 15px;
+            font-size: 16px;
+        }
+        select {
+            padding: 8px 15px;
+            font-size: 16px;
+            border-radius: 10px;
+            border: 2px solid #3498db;
+            background-color: white;
+            color: #2c3e50;
+            font-weight: bold;
+            outline: none;
+        }
+
         .score-bar { font-size: 16px; color: #7f8c8d; margin-bottom: 15px; }
         
         .btn-sound {
@@ -40,9 +56,9 @@
         .btn-sound:active { transform: scale(0.96); }
 
         .display-box {
-            font-size: 32px;
+            font-size: 30px;
             font-weight: bold;
-            letter-spacing: 4px;
+            letter-spacing: 3px;
             min-height: 55px;
             line-height: 55px;
             border-bottom: 3px solid #3498db;
@@ -51,13 +67,14 @@
             color: #2c3e50;
             background-color: #fafafa;
             border-radius: 8px 8px 0 0;
+            word-break: break-all;
         }
 
         .bubble-container {
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
-            gap: 12px;
+            gap: 10px;
             margin: 20px 0;
             min-height: 120px;
             align-items: center;
@@ -66,10 +83,10 @@
         .bubble {
             color: white;
             border: none;
-            width: 55px;
-            height: 55px;
+            width: 52px;
+            height: 52px;
             border-radius: 50%;
-            font-size: 24px;
+            font-size: 22px;
             font-weight: bold;
             cursor: pointer;
             box-shadow: 0 4px 8px rgba(0,0,0,0.15);
@@ -80,9 +97,9 @@
         }
         .bubble:active { transform: scale(0.85); }
         .bubble.space-bubble {
-            width: 90px;
+            width: 85px;
             border-radius: 28px;
-            font-size: 18px;
+            font-size: 16px;
             background-color: #f39c12 !important;
         }
         .bubble.used {
@@ -120,7 +137,26 @@
 </head>
 <body>
     <div class="card">
-        <h1>聽音選字母拼字 (51 - 75)</h1>
+        <h1>🎧 聽音選字母拼字大闖關</h1>
+        
+        <div class="select-box">
+            <label for="groupSelect"><b>選擇關卡：</b></label>
+            <select id="groupSelect" onchange="changeGroup()">
+                <option value="1">第 1 ~ 25 題</option>
+                <option value="2">第 26 ~ 50 題</option>
+                <option value="3" selected>第 51 ~ 75 題</option>
+                <option value="4">第 76 ~ 100 題</option>
+                <option value="5">第 101 ~ 125 題</option>
+                <option value="6">第 126 ~ 150 題</option>
+                <option value="7">第 151 ~ 175 題</option>
+                <option value="8">第 176 ~ 200 題</option>
+                <option value="9">第 201 ~ 225 題</option>
+                <option value="10">第 226 ~ 250 題</option>
+                <option value="11">第 251 ~ 275 題</option>
+                <option value="12">第 276 ~ 300 題</option>
+            </select>
+        </div>
+
         <div class="score-bar">第 <span id="current">1</span> / <span id="total">25</span> 題</div>
         
         <button class="btn-sound" onclick="playAudio()">🔊 聽發音</button>
@@ -138,17 +174,33 @@
     </div>
 
     <script>
-        const wordList = [
-            "retreat", "pull back", "intensity", "energy", "forfeit",
-            "wrongdoing", "alter", "change", "collapse", "fall",
-            "crisis", "emergency", "destruction", "destroy", "hazard",
-            "danger", "severe", "strong", "substantial", "a lot",
-            "unpredictable", "surprised", "bouquet", "flower", "emotion"
-        ];
+        const allGroups = {
+            "1": ["clothes", "umbrella", "sandwich", "milk", "relationship", "artificial", "intelligence", "refrigerator", "confidence", "grammar", "illustration", "expository", "realistic", "fiction", "character", "element", "text feature", "quotation mark", "event", "specific", "example", "narrator", "author", "prediction", "problem"],
+            "2": ["solution", "cause", "effect", "idiom", "synonym", "antonym", "grasshopper", "surprise", "reunion", "adaptation", "sequence", "compare", "contrast", "heading", "diagram", "ancestor", "descendant", "honor", "respect", "despise", "dislike", "irritation", "annoying", "endurance", "strength"],
+            "3": ["retreat", "pull back", "intensity", "energy", "forfeit", "wrongdoing", "alter", "change", "collapse", "fall", "crisis", "emergency", "destruction", "destroy", "hazard", "danger", "severe", "strong", "substantial", "a lot", "unpredictable", "surprised", "bouquet", "flower", "emotion"],
+            "4": ["feeling", "encircle", "surround", "express", "show", "fussy", "picky", "portrait", "likeness", "sparkle", "twinkle", "whirl", "spin", "camouflage", "blend", "dribble", "trickle", "extraordinary", "unusual", "poisonous", "jeopardy", "pounce", "down", "predator", "hunt"],
+            "5": ["prey", "victim", "vibration", "movement", "accelerate", "increase", "advantage", "benefit", "capability", "ability", "friction", "resistance", "gravity", "downward", "identity", "personal", "inquiry", "search", "thrilling", "exciting", "annoyed", "bother", "attitude", "mindset", "commotion"],
+            "6": ["noise", "cranky", "grumpy", "familiar", "usual", "frustrated", "calendar", "selfish", "not sharing", "specialty", "talent", "archaeology", "excavation", "document", "record", "era", "epoch", "evidence", "confirmation", "expedition", "voyage", "permanent", "forever", "tremendous", "enormous"],
+            "7": ["uncover", "expose", "accountable", "responsible", "advise", "suggest", "desperately", "hopeless", "hesitate", "pause", "humiliate", "ashamed", "inspiration", "excite", "self-esteem", "confident", "uncomfortably", "unpleasant", "cling", "stick", "dissolve", "liquid", "gritty", "texture", "humid"],
+            "8": ["weather", "magnify", "enlarge", "microscope", "tool", "mingle", "socialize", "typical", "normal", "settle", "settlement", "prospector", "mineral", "withered", "dried up", "topple", "unsteady", "plunge", "drop", "shrivel", "wrinkled", "scoff", "mock", "territory", "claimed area"],
+            "9": ["capable", "creative", "generous", "honest", "humble", "motivated", "polite", "esteem", "liable", "trustworthy", "power", "speed", "erosion", "battery", "butte", "canyon", "collision", "conductor", "crest", "drought", "flood", "fossil", "fault", "frequency", "gill"],
+            "10": ["heart", "threat", "hydropower", "insulator", "kidney", "landslide", "legend", "lung", "muscle", "organ", "petroleum", "reflect", "resistor", "skeleton", "skin", "sound", "stomach", "system", "tissue", "trough", "tsunami", "volcano", "wave", "wildfire", "absorb"],
+            "11": ["appear", "available", "avalanche", "brain", "coal", "device", "earthquake", "typhoon", "extinct", "generator", "heat", "light", "outcome", "pollutant", "potential", "respond", "sample", "sedimentary", "simulate", "structure", "trench", "transverse", "turbine", "weathering", "deposition"],
+            "12": ["amplitude", "connect", "electric", "eruption", "digital", "horizontal", "function", "receiver", "primary", "sepal", "classify", "emission", "extend", "feature", "impact", "liver", "pattern", "radiation", "ray", "refract", "symbol", "transfer", "transmitter", "uranium", "wavelength"]
+        };
 
+        let currentGroupKey = "3";
+        let wordList = allGroups[currentGroupKey];
         let currentIndex = 0;
         let currentTyped = "";
         let bubbleData = [];
+
+        function changeGroup() {
+            currentGroupKey = document.getElementById("groupSelect").value;
+            wordList = allGroups[currentGroupKey];
+            currentIndex = 0;
+            initWord();
+        }
 
         function initWord() {
             currentTyped = "";
