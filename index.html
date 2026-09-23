@@ -1,276 +1,88 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>聽音拼字小勇者 🎧 Grade 4 Spelling</title>
-  <style>
-    :root {
-      --primary: #6366f1;
-      --primary-dark: #4f46e5;
-      --bg: #f0fdf4;
-      --card-bg: #ffffff;
-      --accent: #f59e0b;
-      --danger: #ef4444;
-      --success: #10b981;
-    }
-
-    * { box-sizing: border-box; font-family: 'Segoe UI', system-ui, sans-serif; }
-    body { margin: 0; padding: 20px; background-color: var(--bg); color: #1e293b; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
-    
-    .container { width: 100%; max-width: 650px; background: white; padding: 25px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.08); text-align: center; }
-    h1 { color: #312e81; margin: 0 0 15px 0; font-size: 1.8rem; }
-    
-    .top-bar { display: flex; justify-content: space-between; align-items: center; background: #f8fafc; padding: 12px 18px; border-radius: 12px; margin-bottom: 20px; font-weight: bold; }
-    select { padding: 8px 12px; border-radius: 8px; border: 1px solid #cbd5e1; font-size: 0.95rem; font-weight: 600; color: #334155; }
-
-    .audio-section { margin: 20px 0; }
-    .btn-audio { background: #e0e7ff; color: var(--primary-dark); border: 2px solid var(--primary); padding: 15px 25px; border-radius: 50px; font-size: 1.2rem; font-weight: bold; cursor: pointer; transition: all 0.2s; margin: 5px; }
-    .btn-audio:hover { transform: scale(1.05); background: var(--primary); color: white; }
-    .btn-audio.slow { background: #fef3c7; color: #b45309; border-color: #f59e0b; }
-
-    .word-slots { display: flex; justify-content: center; gap: 8px; margin: 20px 0; flex-wrap: wrap; min-height: 50px; }
-    .slot { width: 40px; height: 50px; border-bottom: 3px solid #64748b; font-size: 1.8rem; font-weight: bold; display: flex; align-items: center; justify-content: center; color: #1e1b4b; text-transform: lowercase; }
-
-    .input-box { width: 80%; font-size: 1.5rem; padding: 10px; text-align: center; border: 2px solid #cbd5e1; border-radius: 10px; outline: none; margin-bottom: 15px; letter-spacing: 2px; }
-    .input-box:focus { border-color: var(--primary); }
-
-    .bubbles { display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; margin: 15px 0; }
-    .bubble { background: #f1f5f9; border: 2px solid #cbd5e1; border-radius: 12px; width: 42px; height: 42px; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; font-weight: bold; cursor: pointer; user-select: none; }
-    .bubble:hover { background: #e2e8f0; }
-    .bubble.used { opacity: 0.3; pointer-events: none; }
-
-    .hint-box { background: #f1f5f9; padding: 10px 15px; border-radius: 8px; font-size: 0.95rem; color: #475569; margin: 10px 0; display: none; }
-    
-    .action-btns { display: flex; justify-content: center; gap: 10px; margin-top: 15px; }
-    button.main-btn { background: var(--primary); color: white; border: none; padding: 12px 24px; border-radius: 10px; font-size: 1rem; font-weight: bold; cursor: pointer; }
-    button.main-btn:hover { background: var(--primary-dark); }
-    button.sub-btn { background: #94a3b8; color: white; border: none; padding: 12px 18px; border-radius: 10px; font-size: 0.9rem; cursor: pointer; }
-
-    .status-msg { font-size: 1.2rem; font-weight: bold; margin-top: 15px; min-height: 1.8rem; }
-    .lives { color: var(--danger); font-size: 1.2rem; }
-    .score { color: var(--accent); }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>英文單字聽音拼字遊戲 (51-75)</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; text-align: center; background-color: #f4f7f6; padding: 20px; color: #333; }
+        .card { background: white; max-width: 500px; margin: 20px auto; padding: 30px; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        h1 { color: #2c3e50; font-size: 22px; }
+        .btn { background-color: #3498db; color: white; border: none; padding: 12px 24px; font-size: 18px; border-radius: 8px; cursor: pointer; margin: 10px 5px; }
+        .btn:active { background-color: #2980b9; }
+        input[type="text"] { font-size: 20px; padding: 10px; width: 80%; border: 2px solid #ccc; border-radius: 8px; text-align: center; margin-top: 15px; }
+        #result { margin-top: 15px; font-size: 20px; font-weight: bold; min-height: 30px; }
+        #score { font-size: 18px; color: #7f8c8d; margin-bottom: 10px; }
+    </style>
 </head>
 <body>
-
-<div class="container">
-  <h1>🎧 聽音拼字小勇者</h1>
-
-  <div class="top-bar">
-    <div>
-      <label>關卡：</label>
-      <select id="group-select" onchange="changeGroup()"></select>
+    <div class="card">
+        <h1>單字聽音拼字練習 (51 - 75)</h1>
+        <div id="score">題號：<span id="current">1</span> / <span id="total">25</span></div>
+        <button class="btn" onclick="playAudio()">🔊 聽發音</button>
+        <br>
+        <input type="text" id="userInput" placeholder="請輸入英文單字" autocomplete="off" autocorrect="off" autocapitalize="none">
+        <br>
+        <button class="btn" style="background-color: #2ecc71;" onclick="checkAnswer()">送出答案</button>
+        <div id="result"></div>
     </div>
-    <div class="lives" id="lives-display">❤️❤️❤️</div>
-    <div class="score" id="score-display">⭐ 得分: 0</div>
-  </div>
 
-  <div class="audio-section">
-    <button class="btn-audio" onclick="playAudio(1.0)">🔊 聽正常發音</button>
-    <button class="btn-audio slow" onclick="playAudio(0.6)">🐢 慢速發音</button>
-  </div>
+    <script>
+        const wordList = [
+            "retreat", "pull back", "intensity", "energy", "forfeit",
+            "wrongdoing", "alter", "change", "collapse", "fall",
+            "crisis", "emergency", "destruction", "destroy", "hazard",
+            "danger", "severe", "strong", "substantial", "a lot",
+            "unpredictable", "surprised", "bouquet", "flower", "emotion"
+        ];
 
-  <div class="hint-box" id="hint-display"></div>
+        let currentIndex = 0;
 
-  <!-- 單字字數底線 -->
-  <div class="word-slots" id="word-slots"></div>
+        function updateProgress() {
+            document.getElementById('current').innerText = currentIndex + 1;
+            document.getElementById('total').innerText = wordList.length;
+        }
 
-  <!-- 鍵盤輸入框 -->
-  <input type="text" id="user-input" class="input-box" placeholder="點此輸入拼字..." autocomplete="off" oninput="syncInputWithSlots()" onkeyup="if(event.key==='Enter') checkAnswer()">
+        function playAudio() {
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
+                const text = wordList[currentIndex];
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = 'en-US';
+                utterance.rate = 0.8;
+                window.speechSynthesis.speak(utterance);
+            } else {
+                alert("您的瀏覽器不支援發音功能");
+            }
+        }
 
-  <!-- 字母氣泡選擇區 -->
-  <div class="bubbles" id="bubbles-container"></div>
+        function checkAnswer() {
+            const input = document.getElementById('userInput').value.trim().toLowerCase();
+            const correct = wordList[currentIndex].toLowerCase();
+            const resultDiv = document.getElementById('result');
 
-  <div class="action-btns">
-    <button class="sub-btn" onclick="toggleHint()">💡 看中文提示</button>
-    <button class="sub-btn" onclick="clearInput()">🧹 清除重新拼</button>
-    <button class="main-btn" onclick="checkAnswer()">🚀 檢查答案</button>
-  </div>
+            if (input === correct) {
+                resultDiv.style.color = '#2ecc71';
+                resultDiv.innerText = "🎉 答對了！";
+                setTimeout(() => {
+                    resultDiv.innerText = "";
+                    document.getElementById('userInput').value = "";
+                    currentIndex = (currentIndex + 1) % wordList.length;
+                    updateProgress();
+                }, 1000);
+            } else {
+                resultDiv.style.color = '#e74c3c';
+                resultDiv.innerText = "❌ 答錯囉，再試一次！";
+            }
+        }
 
-  <div class="status-msg" id="status-msg"></div>
-</div>
+        document.getElementById('userInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                checkAnswer();
+            }
+        });
 
-<script>
-  // 1~300 完整的單字資料庫
-  const ALL_WORDS = {
-    "1 ~ 25": [{"num": 1, "en": "clothes", "zh": "衣服"}, {"num": 2, "en": "umbrella", "zh": "雨傘"}, {"num": 3, "en": "sandwich", "zh": "三明治"}, {"num": 4, "en": "milk", "zh": "牛奶"}, {"num": 5, "en": "relationship", "zh": "關係"}, {"num": 6, "en": "artificial", "zh": "人造的 / 人工的"}, {"num": 7, "en": "intelligence", "zh": "智慧 / 智力"}, {"num": 8, "en": "refrigerator", "zh": "冰箱"}, {"num": 9, "en": "confidence", "zh": "信心"}, {"num": 10, "en": "grammar", "zh": "語法 / 文法"}, {"num": 11, "en": "illustration", "zh": "插圖"}, {"num": 12, "en": "expository", "zh": "說明性的"}, {"num": 13, "en": "realistic", "zh": "寫實的 / 現實的"}, {"num": 14, "en": "fiction", "zh": "小說 / 虛構"}, {"num": 15, "en": "character", "zh": "角色 / 性格"}, {"num": 16, "en": "element", "zh": "元素 / 要素"}, {"num": 17, "en": "text feature", "zh": "文本特徵"}, {"num": 18, "en": "quotation mark", "zh": "引號"}, {"num": 19, "en": "event", "zh": "事件"}, {"num": 20, "en": "specific", "zh": "具體的 / 特定的"}, {"num": 21, "en": "example", "zh": "例子 / 範例"}, {"num": 22, "en": "narrator", "zh": "旁白 / 敘述者"}, {"num": 23, "en": "author", "zh": "作者"}, {"num": 24, "en": "prediction", "zh": "預測"}, {"num": 25, "en": "problem", "zh": "問題"}],
-    "26 ~ 50": [{"num": 26, "en": "solution", "zh": "解決方案 / 解答"}, {"num": 27, "en": "cause", "zh": "原因 / 起因"}, {"num": 28, "en": "effect", "zh": "效果 / 影響"}, {"num": 29, "en": "idiom", "zh": "成語 / 慣用語"}, {"num": 30, "en": "synonym", "zh": "同義詞"}, {"num": 31, "en": "antonym", "zh": "反義詞"}, {"num": 32, "en": "grasshopper", "zh": "蚱蜢"}, {"num": 33, "en": "surprise", "zh": "驚喜 / 使驚奇"}, {"num": 34, "en": "reunion", "zh": "重聚 / 團聚"}, {"num": 35, "en": "adaptation", "zh": "改編 / 適應"}, {"num": 36, "en": "sequence", "zh": "順序 / 次序"}, {"num": 37, "en": "compare", "zh": "比較"}, {"num": 38, "en": "contrast", "zh": "對比"}, {"num": 39, "en": "heading", "zh": "標題"}, {"num": 40, "en": "diagram", "zh": "圖表 / 示意圖"}, {"num": 41, "en": "ancestor", "zh": "祖先"}, {"num": 42, "en": "descendant", "zh": "後代 / 子孫"}, {"num": 43, "en": "honor", "zh": "榮譽 / 尊敬"}, {"num": 44, "en": "respect", "zh": "尊重"}, {"num": 45, "en": "despise", "zh": "輕視 / 鄙視"}, {"num": 46, "en": "dislike", "zh": "不喜歡 / 討厭"}, {"num": 47, "en": "irritation", "zh": "惱怒 / 刺激"}, {"num": 48, "en": "annoying", "zh": "惱人的 / 討厭的"}, {"num": 49, "en": "endurance", "zh": "忍耐力 / 耐力"}, {"num": 50, "en": "strength", "zh": "力量 / 優點"}],
-    "51 ~ 75": [{"num": 51, "en": "retreat", "zh": "撤退 / 退避"}, {"num": 52, "en": "pull back", "zh": "拉回 / 撤退"}, {"num": 53, "en": "intensity", "zh": "強度 / 烈度"}, {"num": 54, "en": "energy", "zh": "能量 / 精力"}, {"num": 55, "en": "forfeit", "zh": "放棄 / 喪失"}, {"num": 56, "en": "wrongdoing", "zh": "壞事 / 不法行為"}, {"num": 57, "en": "alter", "zh": "改變 / 修改"}, {"num": 58, "en": "change", "zh": "改變"}, {"num": 59, "en": "collapse", "zh": "倒塌 / 崩潰"}, {"num": 60, "en": "fall", "zh": "落下 / 跌倒"}, {"num": 61, "en": "crisis", "zh": "危機"}, {"num": 62, "en": "emergency", "zh": "緊急狀況"}, {"num": 63, "en": "destruction", "zh": "破壞 / 毀滅"}, {"num": 64, "en": "destroy", "zh": "毀壞 / 破壞"}, {"num": 65, "en": "hazard", "zh": "危險 / 危害"}, {"num": 66, "en": "danger", "zh": "危險"}, {"num": 67, "en": "severe", "zh": "嚴重的 / 嚴厲的"}, {"num": 68, "en": "strong", "zh": "強壯的 / 強烈的"}, {"num": 69, "en": "substantial", "zh": "大量的 / 實質的"}, {"num": 70, "en": "a lot", "zh": "許多 / 大量"}, {"num": 71, "en": "unpredictable", "zh": "無法預測的"}, {"num": 72, "en": "surprised", "zh": "感到驚訝的"}, {"num": 73, "en": "bouquet", "zh": "花束"}, {"num": 74, "en": "flower", "zh": "花"}, {"num": 75, "en": "emotion", "zh": "情緒 / 情感"}],
-    "76 ~ 100": [{"num": 76, "en": "feeling", "zh": "感覺 / 情感"}, {"num": 77, "en": "encircle", "zh": "環繞 / 包圍"}, {"num": 78, "en": "surround", "zh": "圍繞 / 包圍"}, {"num": 79, "en": "express", "zh": "表達"}, {"num": 80, "en": "show", "zh": "展示 / 顯示"}, {"num": 81, "en": "fussy", "zh": "挑剔的"}, {"num": 82, "en": "picky", "zh": "挑剔的"}, {"num": 83, "en": "portrait", "zh": "肖像 / 人像"}, {"num": 84, "en": "likeness", "zh": "相似 / 肖像"}, {"num": 85, "en": "sparkle", "zh": "閃爍 / 火花"}, {"num": 86, "en": "twinkle", "zh": "閃爍 / 發光"}, {"num": 87, "en": "whirl", "zh": "旋轉 / 迴旋"}, {"num": 88, "en": "spin", "zh": "旋轉"}, {"num": 89, "en": "camouflage", "zh": "偽裝 / 迷彩"}, {"num": 90, "en": "blend", "zh": "混合 / 融入"}, {"num": 91, "en": "dribble", "zh": "運球 / 滴下"}, {"num": 92, "en": "trickle", "zh": "滴流 / 細流"}, {"num": 93, "en": "extraordinary", "zh": "非凡的 / 特殊的"}, {"num": 94, "en": "unusual", "zh": "不尋常的"}, {"num": 95, "en": "poisonous", "zh": "有毒的"}, {"num": 96, "en": "jeopardy", "zh": "危險 / 風險"}, {"num": 97, "en": "pounce", "zh": "猛撲"}, {"num": 98, "en": "down", "zh": "向下"}, {"num": 99, "en": "predator", "zh": "掠食者"}, {"num": 100, "en": "hunt", "zh": "打獵 / 獵捕"}],
-    "101 ~ 125": [{"num": 101, "en": "prey", "zh": "獵物"}, {"num": 102, "en": "victim", "zh": "受害者"}, {"num": 103, "en": "vibration", "zh": "震動"}, {"num": 104, "en": "movement", "zh": "運動 / 移動"}, {"num": 105, "en": "accelerate", "zh": "加速"}, {"num": 106, "en": "increase", "zh": "增加"}, {"num": 107, "en": "advantage", "zh": "優勢 / 好處"}, {"num": 108, "en": "benefit", "zh": "好處 / 利益"}, {"num": 109, "en": "capability", "zh": "能力"}, {"num": 110, "en": "ability", "zh": "能力"}, {"num": 111, "en": "friction", "zh": "摩擦力"}, {"num": 112, "en": "resistance", "zh": "阻力 / 抵抗"}, {"num": 113, "en": "gravity", "zh": "地心引力 / 重力"}, {"num": 114, "en": "downward", "zh": "向下的"}, {"num": 115, "en": "identity", "zh": "身分"}, {"num": 116, "en": "personal", "zh": "個人的"}, {"num": 117, "en": "inquiry", "zh": "詢問 / 調查"}, {"num": 118, "en": "search", "zh": "搜尋 / 尋找"}, {"num": 119, "en": "thrilling", "zh": "刺激的 / 驚險的"}, {"num": 120, "en": "exciting", "zh": "令人興奮的"}, {"num": 121, "en": "annoyed", "zh": "感到惱怒的"}, {"num": 122, "en": "bother", "zh": "打擾 / 煩惱"}, {"num": 123, "en": "attitude", "zh": "態度"}, {"num": 124, "en": "mindset", "zh": "心態 / 思維模式"}, {"num": 125, "en": "commotion", "zh": "騷動 / 混亂"}],
-    "126 ~ 150": [{"num": 126, "en": "noise", "zh": "噪音"}, {"num": 127, "en": "cranky", "zh": "脾氣暴躁的"}, {"num": 128, "en": "grumpy", "zh": "脾氣暴躁的"}, {"num": 129, "en": "familiar", "zh": "熟悉的"}, {"num": 130, "en": "usual", "zh": "通常的 / 習慣的"}, {"num": 131, "en": "frustrated", "zh": "感到沮喪的"}, {"num": 132, "en": "calendar", "zh": "日曆"}, {"num": 133, "en": "selfish", "zh": "自私的"}, {"num": 134, "en": "not sharing", "zh": "不願分享"}, {"num": 135, "en": "specialty", "zh": "特長 / 專業"}, {"num": 136, "en": "talent", "zh": "天賦 / 才能"}, {"num": 137, "en": "archaeology", "zh": "考古學"}, {"num": 138, "en": "excavation", "zh": "挖掘 / 開掘"}, {"num": 139, "en": "document", "zh": "文件 / 記錄"}, {"num": 140, "en": "record", "zh": "紀錄 / 記錄"}, {"num": 141, "en": "era", "zh": "時代 / 紀元"}, {"num": 142, "en": "epoch", "zh": "時代 / 新紀元"}, {"num": 143, "en": "evidence", "zh": "證據"}, {"num": 144, "en": "confirmation", "zh": "確認 / 證實"}, {"num": 145, "en": "expedition", "zh": "遠征 / 探險"}, {"num": 146, "en": "voyage", "zh": "航海 / 航行"}, {"num": 147, "en": "permanent", "zh": "永久的"}, {"num": 148, "en": "forever", "zh": "永遠"}, {"num": 149, "en": "tremendous", "zh": "巨大的 / 極大的"}, {"num": 150, "en": "enormous", "zh": "巨大的"}],
-    "151 ~ 175": [{"num": 151, "en": "uncover", "zh": "揭開 / 發現"}, {"num": 152, "en": "expose", "zh": "暴露 / 揭露"}, {"num": 153, "en": "accountable", "zh": "負有責任的"}, {"num": 154, "en": "responsible", "zh": "有責任的"}, {"num": 155, "en": "advise", "zh": "建議 / 勸告"}, {"num": 156, "en": "suggest", "zh": "建議"}, {"num": 157, "en": "desperately", "zh": "拼命地 / 絕望地"}, {"num": 158, "en": "hopeless", "zh": "絕望的 / 無可救藥的"}, {"num": 159, "en": "hesitate", "zh": "猶豫"}, {"num": 160, "en": "pause", "zh": "暫停 / 停頓"}, {"num": 161, "en": "humiliate", "zh": "使屈辱 / 羞辱"}, {"num": 162, "en": "ashamed", "zh": "感到羞恥的"}, {"num": 163, "en": "inspiration", "zh": "靈感 / 啟發"}, {"num": 164, "en": "excite", "zh": "使興奮 / 激勵"}, {"num": 165, "en": "self-esteem", "zh": "自尊心"}, {"num": 166, "en": "confident", "zh": "自信的"}, {"num": 167, "en": "uncomfortably", "zh": "不舒服地 / 尷尬地"}, {"num": 168, "en": "unpleasant", "zh": "令人不快的"}, {"num": 169, "en": "cling", "zh": "緊貼 / 執著"}, {"num": 170, "en": "stick", "zh": "黏住 / 堅持"}, {"num": 171, "en": "dissolve", "zh": "溶解 / 消散"}, {"num": 172, "en": "liquid", "zh": "液體"}, {"num": 173, "en": "gritty", "zh": "沙砂的 / 堅毅的"}, {"num": 174, "en": "texture", "zh": "質地 / 觸感"}, {"num": 175, "en": "humid", "zh": "潮濕的"}],
-    "176 ~ 200": [{"num": 176, "en": "weather", "zh": "天氣"}, {"num": 177, "en": "magnify", "zh": "放大"}, {"num": 178, "en": "enlarge", "zh": "擴大 / 放大"}, {"num": 179, "en": "microscope", "zh": "顯微鏡"}, {"num": 180, "en": "tool", "zh": "工具"}, {"num": 181, "en": "mingle", "zh": "混合 / 交際"}, {"num": 182, "en": "socialize", "zh": "社交 / 交際"}, {"num": 183, "en": "typical", "zh": "典型的"}, {"num": 184, "en": "normal", "zh": "正常的 / 通常的"}, {"num": 185, "en": "settle", "zh": "安頓 / 定居"}, {"num": 186, "en": "settlement", "zh": "定居點 / 解決"}, {"num": 187, "en": "prospector", "zh": "探礦者 / 採礦者"}, {"num": 188, "en": "mineral", "zh": "礦物"}, {"num": 189, "en": "withered", "zh": "枯萎的 / 憔悴的"}, {"num": 190, "en": "dried up", "zh": "乾涸的"}, {"num": 191, "en": "topple", "zh": "傾倒 / 倒塌"}, {"num": 192, "en": "unsteady", "zh": "不穩定的"}, {"num": 193, "en": "plunge", "zh": "驟降 / 俯衝"}, {"num": 194, "en": "drop", "zh": "掉落 / 下降"}, {"num": 195, "en": "shrivel", "zh": "枯萎 / 皺縮"}, {"num": 196, "en": "wrinkled", "zh": "起皺的"}, {"num": 197, "en": "scoff", "zh": "嘲笑 / 嘲弄"}, {"num": 198, "en": "mock", "zh": "嘲弄 / 模仿"}, {"num": 199, "en": "territory", "zh": "領土 / 領域"}, {"num": 200, "en": "claimed area", "zh": "主張的區域 / 領地"}],
-    "201 ~ 225": [{"num": 201, "en": "capable", "zh": "有能力的"}, {"num": 202, "en": "creative", "zh": "有創意的"}, {"num": 203, "en": "generous", "zh": "慷慨的"}, {"num": 204, "en": "honest", "zh": "誠實的"}, {"num": 205, "en": "humble", "zh": "謙虛的"}, {"num": 206, "en": "motivated", "zh": "受激勵的 / 積極的"}, {"num": 207, "en": "polite", "zh": "有禮貌的"}, {"num": 208, "en": "esteem", "zh": "尊重 / 敬重"}, {"num": 209, "en": "liable", "zh": "有責任的"}, {"num": 210, "en": "trustworthy", "zh": "值得信賴的"}, {"num": 211, "en": "power", "zh": "力量 / 電源"}, {"num": 212, "en": "speed", "zh": "速度"}, {"num": 213, "en": "erosion", "zh": "侵蝕"}, {"num": 214, "en": "battery", "zh": "電池"}, {"num": 215, "en": "butte", "zh": "孤峰 / 孤山"}, {"num": 216, "en": "canyon", "zh": "峽谷"}, {"num": 217, "en": "collision", "zh": "碰撞 / 衝突"}, {"num": 218, "en": "conductor", "zh": "導體 / 指揮"}, {"num": 219, "en": "crest", "zh": "波峰 / 頂峰"}, {"num": 220, "en": "drought", "zh": "乾旱"}, {"num": 221, "en": "flood", "zh": "洪水"}, {"num": 222, "en": "fossil", "zh": "化石"}, {"num": 223, "en": "fault", "zh": "斷層 / 缺點"}, {"num": 224, "en": "frequency", "zh": "頻率"}, {"num": 225, "en": "gill", "zh": "鰓"}],
-    "226 ~ 250": [{"num": 226, "en": "heart", "zh": "心臟"}, {"num": 227, "en": "threat", "zh": "威脅"}, {"num": 228, "en": "hydropower", "zh": "水力發電"}, {"num": 229, "en": "insulator", "zh": "絕緣體"}, {"num": 230, "en": "kidney", "zh": "腎臟"}, {"num": 231, "en": "landslide", "zh": "山崩 / 滑坡"}, {"num": 232, "en": "legend", "zh": "傳說 / 圖例"}, {"num": 233, "en": "lung", "zh": "肺"}, {"num": 234, "en": "muscle", "zh": "肌肉"}, {"num": 235, "en": "organ", "zh": "器官 / 風琴"}, {"num": 236, "en": "petroleum", "zh": "石油"}, {"num": 237, "en": "reflect", "zh": "反射 / 反省"}, {"num": 238, "en": "resistor", "zh": "電阻器"}, {"num": 239, "en": "skeleton", "zh": "骨骼 / 骨架"}, {"num": 240, "en": "skin", "zh": "皮膚"}, {"num": 241, "en": "sound", "zh": "聲音"}, {"num": 242, "en": "stomach", "zh": "胃"}, {"num": 243, "en": "system", "zh": "系統"}, {"num": 244, "en": "tissue", "zh": "組織 / 面紙"}, {"num": 245, "en": "trough", "zh": "波谷 / 槽"}, {"num": 246, "en": "tsunami", "zh": "海嘯"}, {"num": 247, "en": "volcano", "zh": "火山"}, {"num": 248, "en": "wave", "zh": "波浪 / 揮手"}, {"num": 249, "en": "wildfire", "zh": "野火"}, {"num": 250, "en": "absorb", "zh": "吸收"}],
-    "251 ~ 275": [{"num": 251, "en": "appear", "zh": "出現"}, {"num": 252, "en": "available", "zh": "可獲得的 / 有空的"}, {"num": 253, "en": "avalanche", "zh": "雪崩"}, {"num": 254, "en": "brain", "zh": "大腦"}, {"num": 255, "en": "coal", "zh": "煤炭"}, {"num": 256, "en": "device", "zh": "設備 / 裝置"}, {"num": 257, "en": "earthquake", "zh": "地震"}, {"num": 258, "en": "typhoon", "zh": "颱風"}, {"num": 259, "en": "extinct", "zh": "滅絕的 / 絕種的"}, {"num": 260, "en": "generator", "zh": "發電機"}, {"num": 261, "en": "heat", "zh": "熱能 / 加熱"}, {"num": 262, "en": "light", "zh": "光 / 輕的"}, {"num": 263, "en": "outcome", "zh": "結果 / 產出"}, {"num": 264, "en": "pollutant", "zh": "污染物"}, {"num": 265, "en": "potential", "zh": "潛力 / 潛在的"}, {"num": 266, "en": "respond", "zh": "回應 / 回答"}, {"num": 267, "en": "sample", "zh": "樣品 / 樣本"}, {"num": 268, "en": "sedimentary", "zh": "沉積的"}, {"num": 269, "en": "simulate", "zh": "模擬 / 模仿"}, {"num": 270, "en": "structure", "zh": "結構 / 建築物"}, {"num": 271, "en": "trench", "zh": "海溝 / 壕溝"}, {"num": 272, "en": "transverse", "zh": "橫向的 / 切向的"}, {"num": 273, "en": "turbine", "zh": "渦輪機"}, {"num": 274, "en": "weathering", "zh": "風化作用"}, {"num": 275, "en": "deposition", "zh": "沉積作用"}],
-    "276 ~ 300": [{"num": 276, "en": "amplitude", "zh": "振幅 / 豐富"}, {"num": 277, "en": "connect", "zh": "連接 / 連結"}, {"num": 278, "en": "electric", "zh": "電力的 / 電氣的"}, {"num": 279, "en": "eruption", "zh": "噴發 / 爆發"}, {"num": 280, "en": "digital", "zh": "數位的"}, {"num": 281, "en": "horizontal", "zh": "水平的"}, {"num": 282, "en": "function", "zh": "功能 / 運作"}, {"num": 283, "en": "receiver", "zh": "接收器"}, {"num": 284, "en": "primary", "zh": "主要的 / 初級的"}, {"num": 285, "en": "sepal", "zh": "花萼"}, {"num": 286, "en": "classify", "zh": "分類"}, {"num": 287, "en": "emission", "zh": "排放 / 散發"}, {"num": 288, "en": "extend", "zh": "延伸 / 擴展"}, {"num": 289, "en": "feature", "zh": "特徵 / 特色"}, {"num": 290, "en": "impact", "zh": "衝擊 / 影響"}, {"num": 291, "en": "liver", "zh": "肝臟"}, {"num": 292, "en": "pattern", "zh": "模式 / 花紋"}, {"num": 293, "en": "radiation", "zh": "輻射"}, {"num": 294, "en": "ray", "zh": "光線 / 射線"}, {"num": 295, "en": "refract", "zh": "折射"}, {"num": 296, "en": "symbol", "zh": "符號 / 象徵"}, {"num": 297, "en": "transfer", "zh": "轉移 / 傳輸"}, {"num": 298, "en": "transmitter", "zh": "發射器 / 傳送器"}, {"num": 299, "en": "uranium", "zh": "鈾"}, {"num": 300, "en": "wavelength", "zh": "波長"}]
-  };
-
-  let currentList = [];
-  let currentIndex = 0;
-  let currentWordObj = null;
-  let score = 0;
-  let lives = 3;
-
-  // 初始化選單
-  const select = document.getElementById("group-select");
-  Object.keys(ALL_WORDS).forEach(key => {
-    let opt = document.createElement("option");
-    opt.value = key;
-    opt.textContent = `第 ${key} 單字`;
-    select.appendChild(opt);
-  });
-
-  function changeGroup() {
-    const key = select.value;
-    currentList = ALL_WORDS[key].sort(() => Math.random() - 0.5);
-    currentIndex = 0;
-    score = 0;
-    updateScore();
-    loadNextWord();
-  }
-
-  function loadNextWord() {
-    if (currentIndex >= currentList.length) {
-      document.getElementById("status-msg").innerHTML = "🎉 太棒了！您已完成本組所有單字聽寫！";
-      return;
-    }
-    lives = 3;
-    updateLives();
-    currentWordObj = currentList[currentIndex];
-    document.getElementById("user-input").value = "";
-    document.getElementById("status-msg").textContent = "";
-    document.getElementById("hint-display").style.display = "none";
-    document.getElementById("hint-display").textContent = `中文提示：${currentWordObj.zh}`;
-
-    renderSlots();
-    renderBubbles();
-    playAudio(1.0);
-  }
-
-  function playAudio(rate = 1.0) {
-    window.speechSynthesis.cancel();
-    const utterance = new SpeechSynthesisUtterance(currentWordObj.en);
-    utterance.lang = "en-US";
-    utterance.rate = rate;
-    window.speechSynthesis.speak(utterance);
-  }
-
-  function renderSlots() {
-    const container = document.getElementById("word-slots");
-    container.innerHTML = "";
-    const len = currentWordObj.en.length;
-    for (let i = 0; i < len; i++) {
-      let slot = document.createElement("div");
-      slot.className = "slot";
-      if (currentWordObj.en[i] === " ") {
-        slot.style.border = "none";
-        slot.textContent = " ";
-      } else {
-        slot.id = `slot-${i}`;
-      }
-      container.appendChild(slot);
-    }
-  }
-
-  function renderBubbles() {
-    const container = document.getElementById("bubbles-container");
-    container.innerHTML = "";
-    // 將字母打亂並加入隨機干擾字母
-    let letters = currentWordObj.en.replace(/\s+/g, '').toLowerCase().split('');
-    const extraLetters = "abcdefghijklmnopqrstuvwxyz";
-    while (letters.length < Math.max(letters.length + 2, 8)) {
-      letters.push(extraLetters[Math.floor(Math.random() * 26)]);
-    }
-    letters.sort(() => Math.random() - 0.5);
-
-    letters.forEach((char) => {
-      let b = document.createElement("div");
-      b.className = "bubble";
-      b.textContent = char;
-      b.onclick = () => {
-        const input = document.getElementById("user-input");
-        input.value += char;
-        syncInputWithSlots();
-        b.classList.add("used");
-      };
-      container.appendChild(b);
-    });
-  }
-
-  function syncInputWithSlots() {
-    const val = document.getElementById("user-input").value.toLowerCase();
-    const len = currentWordObj.en.length;
-    let valIdx = 0;
-    
-    for (let i = 0; i < len; i++) {
-      const slot = document.getElementById(`slot-${i}`);
-      if (!slot) continue; // 空格
-      if (valIdx < val.length) {
-        slot.textContent = val[valIdx];
-        valIdx++;
-      } else {
-        slot.textContent = "";
-      }
-    }
-  }
-
-  function clearInput() {
-    document.getElementById("user-input").value = "";
-    syncInputWithSlots();
-    document.querySelectorAll(".bubble").forEach(b => b.classList.remove("used"));
-  }
-
-  function checkAnswer() {
-    const userVal = document.getElementById("user-input").value.trim().toLowerCase();
-    const target = currentWordObj.en.toLowerCase();
-    const msg = document.getElementById("status-msg");
-
-    if (userVal === target) {
-      msg.style.color = "var(--success)";
-      msg.textContent = "✨ 太厲害了！拼寫完全正確！";
-      score += 10;
-      updateScore();
-      playAudio(1.0);
-      setTimeout(() => {
-        currentIndex++;
-        loadNextWord();
-      }, 1200);
-    } else {
-      lives--;
-      updateLives();
-      msg.style.color = "var(--danger)";
-      if (lives > 0) {
-        msg.textContent = `❌ 拼錯囉，再聽一次試試看！（剩餘心血：${lives}）`;
-        playAudio(0.8);
-      } else {
-        msg.textContent = `💔 挑戰失敗，正確答案是：${currentWordObj.en}`;
-        setTimeout(() => {
-          currentIndex++;
-          loadNextWord();
-        }, 2200);
-      }
-    }
-  }
-
-  function toggleHint() {
-    const hint = document.getElementById("hint-display");
-    hint.style.display = hint.style.display === "none" ? "block" : "none";
-  }
-
-  function updateLives() {
-    document.getElementById("lives-display").textContent = "❤️".repeat(lives);
-  }
-
-  function updateScore() {
-    document.getElementById("score-display").textContent = `⭐ 得分: ${score}`;
-  }
-
-  // 初始化
-  changeGroup();
-</script>
-
+        updateProgress();
+    </script>
 </body>
 </html>
