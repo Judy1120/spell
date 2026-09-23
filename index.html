@@ -2,28 +2,138 @@
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>英文單字聽音拼字遊戲 (51-75)</title>
     <style>
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; text-align: center; background-color: #f4f7f6; padding: 20px; color: #333; }
-        .card { background: white; max-width: 500px; margin: 20px auto; padding: 30px; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-        h1 { color: #2c3e50; font-size: 22px; }
-        .btn { background-color: #3498db; color: white; border: none; padding: 12px 24px; font-size: 18px; border-radius: 8px; cursor: pointer; margin: 10px 5px; }
-        .btn:active { background-color: #2980b9; }
-        input[type="text"] { font-size: 20px; padding: 10px; width: 80%; border: 2px solid #ccc; border-radius: 8px; text-align: center; margin-top: 15px; }
-        #result { margin-top: 15px; font-size: 20px; font-weight: bold; min-height: 30px; }
-        #score { font-size: 18px; color: #7f8c8d; margin-bottom: 10px; }
+        * { box-sizing: border-box; }
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; 
+            text-align: center; 
+            background-color: #f0f4f8; 
+            padding: 15px; 
+            color: #333; 
+            user-select: none;
+            -webkit-user-select: none;
+        }
+        .card { 
+            background: white; 
+            max-width: 550px; 
+            margin: 10px auto; 
+            padding: 25px 20px; 
+            border-radius: 20px; 
+            box-shadow: 0 8px 20px rgba(0,0,0,0.08); 
+        }
+        h1 { color: #2c3e50; font-size: 22px; margin-top: 0; }
+        .score-bar { font-size: 16px; color: #7f8c8d; margin-bottom: 15px; }
+        
+        .btn-sound {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            font-size: 20px;
+            border-radius: 30px;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(52,152,219,0.3);
+            margin-bottom: 15px;
+        }
+        .btn-sound:active { transform: scale(0.96); }
+
+        .display-box {
+            font-size: 32px;
+            font-weight: bold;
+            letter-spacing: 4px;
+            min-height: 55px;
+            line-height: 55px;
+            border-bottom: 3px solid #3498db;
+            margin: 10px auto 20px;
+            width: 90%;
+            color: #2c3e50;
+            background-color: #fafafa;
+            border-radius: 8px 8px 0 0;
+        }
+
+        .bubble-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 12px;
+            margin: 20px 0;
+            min-height: 120px;
+            align-items: center;
+        }
+
+        .bubble {
+            color: white;
+            border: none;
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            font-size: 24px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.15s, opacity 0.2s;
+        }
+        .bubble:active { transform: scale(0.85); }
+        .bubble.space-bubble {
+            width: 90px;
+            border-radius: 28px;
+            font-size: 18px;
+            background-color: #f39c12 !important;
+        }
+        .bubble.used {
+            opacity: 0.15;
+            pointer-events: none;
+            transform: scale(0.75);
+            box-shadow: none;
+        }
+
+        .action-btns {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 15px;
+        }
+        .btn-action {
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 12px;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+            color: white;
+        }
+        .btn-back { background-color: #e74c3c; }
+        .btn-clear { background-color: #95a5a6; }
+
+        #result {
+            margin-top: 15px;
+            font-size: 22px;
+            font-weight: bold;
+            min-height: 35px;
+        }
     </style>
 </head>
 <body>
     <div class="card">
-        <h1>單字聽音拼字練習 (51 - 75)</h1>
-        <div id="score">題號：<span id="current">1</span> / <span id="total">25</span></div>
-        <button class="btn" onclick="playAudio()">🔊 聽發音</button>
-        <br>
-        <input type="text" id="userInput" placeholder="請輸入英文單字" autocomplete="off" autocorrect="off" autocapitalize="none">
-        <br>
-        <button class="btn" style="background-color: #2ecc71;" onclick="checkAnswer()">送出答案</button>
+        <h1>聽音選字母拼字 (51 - 75)</h1>
+        <div class="score-bar">第 <span id="current">1</span> / <span id="total">25</span> 題</div>
+        
+        <button class="btn-sound" onclick="playAudio()">🔊 聽發音</button>
+        
+        <div class="display-box" id="display"></div>
+
+        <div class="bubble-container" id="bubbleArea"></div>
+
+        <div class="action-btns">
+            <button class="btn-action btn-back" onclick="backspace()">⌫ 刪除</button>
+            <button class="btn-action btn-clear" onclick="clearAll()">🔄 重設</button>
+        </div>
+
         <div id="result"></div>
     </div>
 
@@ -37,10 +147,91 @@
         ];
 
         let currentIndex = 0;
+        let currentTyped = "";
+        let bubbleData = [];
 
-        function updateProgress() {
+        function initWord() {
+            currentTyped = "";
+            document.getElementById('display').innerText = "";
+            document.getElementById('result').innerText = "";
             document.getElementById('current').innerText = currentIndex + 1;
             document.getElementById('total').innerText = wordList.length;
+
+            const targetWord = wordList[currentIndex];
+            let chars = targetWord.split('');
+
+            // 洗牌字母順序
+            for (let i = chars.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [chars[i], chars[j]] = [chars[j], chars[i]];
+            }
+
+            bubbleData = chars.map((char, index) => ({
+                id: index,
+                char: char,
+                used: false
+            }));
+
+            renderBubbles();
+            playAudio();
+        }
+
+        function renderBubbles() {
+            const container = document.getElementById('bubbleArea');
+            container.innerHTML = '';
+
+            const colors = ['#e74c3c', '#e67e22', '#2ecc71', '#1abc9c', '#3498db', '#9b59b6'];
+
+            bubbleData.forEach((item, index) => {
+                const btn = document.createElement('button');
+                const isSpace = item.char === ' ';
+                btn.className = 'bubble' + (isSpace ? ' space-bubble' : '') + (item.used ? ' used' : '');
+                btn.innerText = isSpace ? '空白' : item.char;
+                btn.style.backgroundColor = colors[index % colors.length];
+                btn.onclick = () => selectBubble(index);
+                container.appendChild(btn);
+            });
+        }
+
+        function selectBubble(index) {
+            if (bubbleData[index].used) return;
+            bubbleData[index].used = true;
+            currentTyped += bubbleData[index].char;
+            updateDisplay();
+            renderBubbles();
+
+            // 拼完自動檢查
+            if (currentTyped.length === wordList[currentIndex].length) {
+                checkAnswer();
+            }
+        }
+
+        function backspace() {
+            if (currentTyped.length === 0) return;
+            const lastChar = currentTyped[currentTyped.length - 1];
+            currentTyped = currentTyped.slice(0, -1);
+
+            for (let i = bubbleData.length - 1; i >= 0; i--) {
+                if (bubbleData[i].used && bubbleData[i].char === lastChar) {
+                    bubbleData[i].used = false;
+                    break;
+                }
+            }
+            document.getElementById('result').innerText = "";
+            updateDisplay();
+            renderBubbles();
+        }
+
+        function clearAll() {
+            currentTyped = "";
+            bubbleData.forEach(item => item.used = false);
+            document.getElementById('result').innerText = "";
+            updateDisplay();
+            renderBubbles();
+        }
+
+        function updateDisplay() {
+            document.getElementById('display').innerText = currentTyped;
         }
 
         function playAudio() {
@@ -51,38 +242,27 @@
                 utterance.lang = 'en-US';
                 utterance.rate = 0.8;
                 window.speechSynthesis.speak(utterance);
-            } else {
-                alert("您的瀏覽器不支援發音功能");
             }
         }
 
         function checkAnswer() {
-            const input = document.getElementById('userInput').value.trim().toLowerCase();
-            const correct = wordList[currentIndex].toLowerCase();
             const resultDiv = document.getElementById('result');
+            const target = wordList[currentIndex];
 
-            if (input === correct) {
+            if (currentTyped.toLowerCase() === target.toLowerCase()) {
                 resultDiv.style.color = '#2ecc71';
-                resultDiv.innerText = "🎉 答對了！";
+                resultDiv.innerText = "🎉 答對了！太棒了！";
                 setTimeout(() => {
-                    resultDiv.innerText = "";
-                    document.getElementById('userInput').value = "";
                     currentIndex = (currentIndex + 1) % wordList.length;
-                    updateProgress();
-                }, 1000);
+                    initWord();
+                }, 1200);
             } else {
                 resultDiv.style.color = '#e74c3c';
-                resultDiv.innerText = "❌ 答錯囉，再試一次！";
+                resultDiv.innerText = "❌ 拼錯囉，請再試試看！";
             }
         }
 
-        document.getElementById('userInput').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                checkAnswer();
-            }
-        });
-
-        updateProgress();
+        initWord();
     </script>
 </body>
 </html>
